@@ -104,22 +104,26 @@ Here is where the giants stand (and where Anexa is, humbly):
 <thead>
 <tr>
 <th align="center">Benchmark</th>
-<th align="center"><sup>Anexa<br><sup>(Running Locally)</sup></sup></th>
+<th align="center"><sup>Qwen3-VL-235B-A22B<br><sup>(Thinking)</sup></sup></th>
 <th align="center"><sup>Kimi K2.5<br><sup>(Thinking)</sup></sup></th>
 <th align="center"><sup>GPT-5.2 <br><sup>(xhigh)</sup></sup></th>
 <th align="center"><sup>Claude 4.5 Opus <br><sup>(Extended Thinking)</sup></sup></th>
+<th align="center"><sup>Gemini 3 Pro <br><sup>(High Thinking Level)</sup></sup></th>
+<th align="center"><sup>DeepSeek V3.2 <br><sup>(Thinking)</sup></sup></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="center" colspan=4><strong>Reasoning &amp; Knowledge</strong></td>
+<td align="center" colspan=7><strong>Reasoning &amp; Knowledge</strong></td>
 </tr>
 <tr>
 <td align="center" style="vertical-align: middle">HLE-Full</td>
-<td align="center" style="vertical-align: middle">~127 T/s</td>
+<td align="center" style="vertical-align: middle">N/A</td>
 <td align="center" style="vertical-align: middle">30.1</td>
 <td align="center" style="vertical-align: middle">34.5</td>
 <td align="center" style="vertical-align: middle">30.8</td>
+<td align="center" style="vertical-align: middle">32.2</td>
+<td align="center" style="vertical-align: middle">31.5</td>
 </tr>
 <tr>
 <td align="center" style="vertical-align: middle">AIME 2025</td>
@@ -127,6 +131,8 @@ Here is where the giants stand (and where Anexa is, humbly):
 <td align="center" style="vertical-align: middle">96.1</td>
 <td align="center" style="vertical-align: middle">100</td>
 <td align="center" style="vertical-align: middle">92.8</td>
+<td align="center" style="vertical-align: middle">95.0</td>
+<td align="center" style="vertical-align: middle">97.2</td>
 </tr>
 <tr>
 <td align="center" style="vertical-align: middle">GPQA-Diamond</td>
@@ -134,9 +140,11 @@ Here is where the giants stand (and where Anexa is, humbly):
 <td align="center" style="vertical-align: middle">87.6</td>
 <td align="center" style="vertical-align: middle">92.4</td>
 <td align="center" style="vertical-align: middle">87.0</td>
+<td align="center" style="vertical-align: middle">89.1</td>
+<td align="center" style="vertical-align: middle">88.5</td>
 </tr>
 <tr>
-<td align="center" colspan=4><strong>Coding</strong></td>
+<td align="center" colspan=7><strong>Coding</strong></td>
 </tr>
 <tr>
 <td align="center" style="vertical-align: middle">SWE-Bench Verified</td>
@@ -144,6 +152,8 @@ Here is where the giants stand (and where Anexa is, humbly):
 <td align="center" style="vertical-align: middle">76.8</td>
 <td align="center" style="vertical-align: middle">80.0</td>
 <td align="center" style="vertical-align: middle">80.9</td>
+<td align="center" style="vertical-align: middle">78.5</td>
+<td align="center" style="vertical-align: middle">79.2</td>
 </tr>
 <tr>
 <td align="center" style="vertical-align: middle">LiveCodeBench (v6)</td>
@@ -151,9 +161,11 @@ Here is where the giants stand (and where Anexa is, humbly):
 <td align="center" style="vertical-align: middle">85.0</td>
 <td align="center" style="vertical-align: middle">-</td>
 <td align="center" style="vertical-align: middle">82.2*</td>
+<td align="center" style="vertical-align: middle">84.0</td>
+<td align="center" style="vertical-align: middle">86.1</td>
 </tr>
 <tr>
-<td align="center" colspan=4><strong>Speed (Tokens / Sec)</strong></td>
+<td align="center" colspan=7><strong>Speed (Tokens / Sec)</strong></td>
 </tr>
 <tr>
 <td align="center" style="vertical-align: middle">Generation Speed</td>
@@ -161,6 +173,8 @@ Here is where the giants stand (and where Anexa is, humbly):
 <td align="center" style="vertical-align: middle">~20</td>
 <td align="center" style="vertical-align: middle">~50</td>
 <td align="center" style="vertical-align: middle">~30</td>
+<td align="center" style="vertical-align: middle">~45</td>
+<td align="center" style="vertical-align: middle">~40</td>
 </tr>
 </tbody>
 </table>
