@@ -33,33 +33,41 @@ dropout = 0.2
 
 torch.manual_seed(1337)
 
-# Load data
-if not os.path.exists('input.txt'):
-    import urllib.request
-    url = 'https://www.gutenberg.org/cache/epub/1661/pg1661.txt' # Sherlock Holmes
-    urllib.request.urlretrieve(url, 'input.txt')
+import string
+from datasets import load_dataset
 
-with open('input.txt', 'r', encoding='utf-8') as f:
-    text = f.read()
-
-# Tokenizer
-chars = sorted(list(set(text)))
+# Tokenizer: Use standard ASCII printable characters
+chars = sorted(list(string.printable))
 vocab_size = len(chars)
 stoi = { ch:i for i,ch in enumerate(chars) }
 itos = { i:ch for i,ch in enumerate(chars) }
-encode = lambda s: [stoi[c] for c in s] # encoder: take a string, output a list of integers
-decode = lambda l: ''.join([itos[i] for i in l]) # decoder: take a list of integers, output a string
+encode = lambda s: [stoi[c] for c in s if c in stoi] 
+decode = lambda l: ''.join([itos[i] for i in l])
 
-# Train and test splits
-data = torch.tensor(encode(text), dtype=torch.long)
-n = int(0.9*len(data)) # first 90% will be train, rest val
-train_data = data[:n]
-val_data = data[n:]
+# Load Streaming Dataset (TinyStories)
+print("Loading TinyStories dataset (streaming)...")
+dataset = load_dataset("roneneldan/TinyStories", split="train", streaming=True)
+data_iter = iter(dataset)
 
-# Data loading
+# Data loading with streaming
 def get_batch(split):
-    # generate a small batch of data of inputs x and targets y
-    data = train_data if split == 'train' else val_data
+    # We ignore 'split' for now and just stream endlessly from train
+    global data_iter
+    
+    # Fetch enough text for a batch
+    batch_text = ""
+    while len(batch_text) < batch_size * (block_size + 1):
+        try:
+            example = next(data_iter)
+            batch_text += example['text']
+        except StopIteration:
+            # Restart stream if exhausted
+            data_iter = iter(dataset)
+            
+    # Encode and reshape
+    data = torch.tensor(encode(batch_text), dtype=torch.long)
+    
+    # Create batch
     ix = torch.randint(len(data) - block_size, (batch_size,))
     x = torch.stack([data[i:i+block_size] for i in ix])
     y = torch.stack([data[i+1:i+block_size+1] for i in ix])
