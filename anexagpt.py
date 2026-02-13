@@ -202,7 +202,8 @@ class GPTLanguageModel(nn.Module):
 
         return logits, loss
 
-    def generate(self, idx, max_new_tokens):
+    @torch.no_grad()
+    def generate_stream(self, idx, max_new_tokens):
         # idx is (B, T) array of indices in the current context
         for _ in range(max_new_tokens):
             # crop idx to the last block_size tokens
@@ -217,68 +218,55 @@ class GPTLanguageModel(nn.Module):
             idx_next = torch.multinomial(probs, num_samples=1) # (B, 1)
             # append sampled index to the running sequence
             idx = torch.cat((idx, idx_next), dim=1) # (B, T+1)
-        return idx
+            yield idx_next
 
-model = GPTLanguageModel()
-m = model.to(device)
-# print the number of parameters in the model
-print(sum(p.numel() for p in m.parameters())/1e6, 'M parameters')
+# ... (Previous code remains, ensuring model class is defined)
 
-# create a PyTorch optimizer
-optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
+# Export these for chat.py
+__all__ = ['GPTLanguageModel', 'encode', 'decode', 'device', 'block_size', 'n_embd', 'n_head', 'n_layer', 'vocab_size', 'itos']
 
-import gc
+if __name__ == "__main__":
+    model = GPTLanguageModel()
+    m = model.to(device)
+    # print the number of parameters in the model
+    print(sum(p.numel() for p in m.parameters())/1e6, 'M parameters')
 
-# Check if model exists
-if os.path.exists('model.safetensors'):
-    print("Loading model from model.safetensors...")
-    state_dict = load_file('model.safetensors')
-    model.load_state_dict(state_dict)
-    model.to(device)
-    # Windows fix: Release memory mapped file lock
-    del state_dict
-    gc.collect()
-else:
-    print("No saved model found, starting training...")
+    # create a PyTorch optimizer
+    optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
 
-print(f"Training on {device}...")
-start_time = time.time()
+    import gc
 
-for iter in range(max_iters):
+    # Check if model exists
+    if os.path.exists('model.safetensors'):
+        print("Loading model from model.safetensors...")
+        state_dict = load_file('model.safetensors')
+        model.load_state_dict(state_dict)
+        model.to(device)
+        # Windows fix: Release memory mapped file lock
+        del state_dict
+        gc.collect()
+    else:
+        print("No saved model found, starting training...")
 
-    # every once in a while evaluate the loss on train and val sets
-    if iter % eval_interval == 0 or iter == max_iters - 1:
-        losses = estimate_loss()
-        print(f"step {iter}: train loss {losses['train']:.4f}, val loss {losses['val']:.4f}")
+    print(f"Training on {device}...")
+    start_time = time.time()
 
-    # sample a batch of data
-    xb, yb = get_batch('train')
+    for iter in range(max_iters):
 
-    # evaluate the loss
-    logits, loss = model(xb, yb)
-    optimizer.zero_grad(set_to_none=True)
-    loss.backward()
-    optimizer.step()
+        # every once in a while evaluate the loss on train and val sets
+        if iter % eval_interval == 0 or iter == max_iters - 1:
+            losses = estimate_loss()
+            print(f"step {iter}: train loss {losses['train']:.4f}, val loss {losses['val']:.4f}")
 
-print(f"Training finished in {time.time() - start_time:.2f}s")
-save_file(model.state_dict(), 'model.safetensors')
-print("Model saved to model.safetensors")
+        # sample a batch of data
+        xb, yb = get_batch('train')
 
-# generate from the model
-print("\n--- Interactive Generation ---")
-print("Enter a prompt to continue (or 'quit' to exit)")
-while True:
-    prompt = input("Prompt: ")
-    if prompt.lower() == 'quit':
-        break
-    
-    if not prompt.strip():
-        continue
-    
-    # Simple encoding: ignore unknown chars (or fail if critical)
-    try:
-        context_idxs = encode(prompt)
-        context = torch.tensor(context_idxs, dtype=torch.long, device=device).unsqueeze(0)
-        print(f"Generated Text: {decode(model.generate(context, max_new_tokens=100)[0].tolist())}")
-    except KeyError:
-        print("Error: Prompt contains characters not in the training set.")
+        # evaluate the loss
+        logits, loss = model(xb, yb)
+        optimizer.zero_grad(set_to_none=True)
+        loss.backward()
+        optimizer.step()
+
+    print(f"Training finished in {time.time() - start_time:.2f}s")
+    save_file(model.state_dict(), 'model.safetensors')
+    print("Model saved to model.safetensors")

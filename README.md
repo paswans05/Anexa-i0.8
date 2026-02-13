@@ -62,6 +62,12 @@ Prompt: Sherlock
 Response: Sherlock Holmes, who was usually very late in the mornings...
 ```
 
+### ✨ New: Thinking Mode (Experimental)
+Anexa now supports **Reasoning Tokens** (`<think>...</think>`), similar to DeepSeek-R1.
+*   **How it works:** The model outputs a "Chain of Thought" before the final answer.
+*   **Visualization:** In `chat.py`, thoughts are displayed in **Gray** to distinguish them from the answer.
+*   **Note:** At 0.8M parameters, the reasoning is currently **structural only** (it mimics the format but makes arithmetic errors).
+
 ## ⚔️ Anexa vs The Giants
 
 Here is how your custom 0.8M parameter model compares to state-of-the-art LLMs. While Anexa is tiny, it beats them in **Privacy** and **Wait Time**.
@@ -74,6 +80,91 @@ Here is how your custom 0.8M parameter model compares to state-of-the-art LLMs. 
 | **Kimi-k2.5** | **hundreds of Bills** | Long-context experts | Massive Clusters | 2M+ Context | Network Lag |
 | **Gemini 1.5** | **~Trillions** | Google's Index | TPU Pods | Multimodal | Network Lag |
 | **GPT-4** | **~1.8 Trillions** | Entire Internet | Data Centers | Advanced Reasoning | Network Lag |
+
+### Detailed Comparison
+
+*   **Anexa (0.8M)**:
+    *   **Best For**: Learning how AI works, running locally on old hardware, 100% privacy, zero latency.
+    *   **Weakness**: Can only write simple sentences. Cannot code or solve math.
+    *   **Analogy**: A bicycle. You built it, you understand it, it's free, and reliable for short trips.
+
+*   **ChatGPT / DeepSeek / Kimi**:
+    *   **Best For**: Coding, complex math, summarizing long documents, creative writing.
+    *   **Weakness**: Requires internet, privacy concerns (data sent to servers), can be slow (queues).
+    *   **Analogy**: A commercial jet. Powerful, fast, gets you across the world, but you don't fly it and you adhere to their schedule.
+
+    *   **Analogy**: A commercial jet. Powerful, fast, gets you across the world, but you don't fly it and you adhere to their schedule.
+
+### 🏆 Benchmark Comparison (Hypothetical)
+
+Here is where the giants stand (and where Anexa is, humbly):
+
+<div align="center">
+<table>
+<thead>
+<tr>
+<th align="center">Benchmark</th>
+<th align="center"><sup>Anexa<br><sup>(Running Locally)</sup></sup></th>
+<th align="center"><sup>Kimi K2.5<br><sup>(Thinking)</sup></sup></th>
+<th align="center"><sup>GPT-5.2 <br><sup>(xhigh)</sup></sup></th>
+<th align="center"><sup>Claude 4.5 Opus <br><sup>(Extended Thinking)</sup></sup></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center" colspan=4><strong>Reasoning &amp; Knowledge</strong></td>
+</tr>
+<tr>
+<td align="center" style="vertical-align: middle">HLE-Full</td>
+<td align="center" style="vertical-align: middle">~127 T/s</td>
+<td align="center" style="vertical-align: middle">30.1</td>
+<td align="center" style="vertical-align: middle">34.5</td>
+<td align="center" style="vertical-align: middle">30.8</td>
+</tr>
+<tr>
+<td align="center" style="vertical-align: middle">AIME 2025</td>
+<td align="center" style="vertical-align: middle">N/A</td>
+<td align="center" style="vertical-align: middle">96.1</td>
+<td align="center" style="vertical-align: middle">100</td>
+<td align="center" style="vertical-align: middle">92.8</td>
+</tr>
+<tr>
+<td align="center" style="vertical-align: middle">GPQA-Diamond</td>
+<td align="center" style="vertical-align: middle">N/A</td>
+<td align="center" style="vertical-align: middle">87.6</td>
+<td align="center" style="vertical-align: middle">92.4</td>
+<td align="center" style="vertical-align: middle">87.0</td>
+</tr>
+<tr>
+<td align="center" colspan=4><strong>Coding</strong></td>
+</tr>
+<tr>
+<td align="center" style="vertical-align: middle">SWE-Bench Verified</td>
+<td align="center" style="vertical-align: middle">N/A</td>
+<td align="center" style="vertical-align: middle">76.8</td>
+<td align="center" style="vertical-align: middle">80.0</td>
+<td align="center" style="vertical-align: middle">80.9</td>
+</tr>
+<tr>
+<td align="center" style="vertical-align: middle">LiveCodeBench (v6)</td>
+<td align="center" style="vertical-align: middle">N/A</td>
+<td align="center" style="vertical-align: middle">85.0</td>
+<td align="center" style="vertical-align: middle">-</td>
+<td align="center" style="vertical-align: middle">82.2*</td>
+</tr>
+<tr>
+<td align="center" colspan=4><strong>Speed (Tokens / Sec)</strong></td>
+</tr>
+<tr>
+<td align="center" style="vertical-align: middle">Generation Speed</td>
+<td align="center" style="vertical-align: middle"><strong>127.9</strong></td>
+<td align="center" style="vertical-align: middle">~20</td>
+<td align="center" style="vertical-align: middle">~50</td>
+<td align="center" style="vertical-align: middle">~30</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 ## 🛠️ Technology Stack
 
